@@ -4,20 +4,25 @@
 |------|----|-------|
 |name|string|null: false|
 |price|integer|null: false|
-|buyer_id|integer|
+|buyer|references|foreign_key: true|
 |seller|references|null: false, foreign_key: true|
 |status|string|null: false|
-|brand_id|integer|
+|brand|references|foreign_key: true|
 |category|references|null: false, foreign_key: true|
+|size|string|
+|condition|string|
+|introduction|text|
+|delivery|references|null: false, foreign_key: true|
 
 ### Association
-- has_many :images
-- has_many :likes 
-- has_many :comments
-- belongs_to :user
+- has_many :images, dependent: :destroy
+- has_many :likes, dependent: :destroy
+- has_many :comments, dependent: :destroy
+- has_one :delivery, dependent: :destroy
+- belongs_to :user, class_name: "User", foreign_key: "seller_id"
+- belongs_to :user, class_name: "User", foreign_key: "buyer_id"
 - belongs_to :brand
 - belongs_to :category
-- belongs_to :status
 
 
 
@@ -25,31 +30,46 @@
 
 |Column|Type|Options|
 |------|----|-------|
-|last_name|varchar|null: false|
-|first_name|varchar|null: false|
-|last_name_kana|varchar|null: false|
-|first_name_kana|varchar|null: false|
-|nickname|varchar|null: false|
-|email|varchar|null: false, add_index :users, email, unique: true|
-|password|varchar|null: false|
-|phone_number|varchar|null: false, add_index :users, mobile_number, unique: true|
+|nickname|string|null: false|
+|email|string|null: false, add_index :users, email, unique: true|
+|password|string|null: false|
 |payment|string|null: false|
-|postcode|varchar|null:false|
-|prefecture|varchar|null:false|
-|city|varchar|null:false|
-|block|varchar|null:false|
-|building|varchar|
 |birthday|date|null:false|
 |avatar_image|text|
-|uid|varchar|
-|provider|varchar|
-
+|introduction|text|
+|uid|string|
+|provider|string|
+|token|string|null:false|
 
 ### Association
-- has_many :items
-- has_many :likes
-- has_many :comments
-- has_one :credit_card
+- has_many :items, dependent: :destroy
+- has_many :likes, dependent: :destroy
+- has_many :comments, dependent: :destroy
+- has_one :personal_informations, dependent: :destroy
+- has_one :credit_card, dependent: :destroy
+
+
+
+## personal_informationsテーブル
+
+|Column|Type|Options|
+|------|----|-------|
+|last_name|string|null: false|
+|first_name|string|null: false|
+|last_name_kana|string|null: false|
+|first_name_kana|string|null: false|
+|postcode|string|null:false|
+|prefecture||null:false|
+|city|string|null:false|
+|block|string|null:false|
+|building|string|
+|phone_number|string|null: false, add_index :users, phone_number, unique: true|
+|user|references|null: false, foreign_key: true|
+
+### Association
+- belongs_to :user
+
+
 
 
 ## brandsテーブル
@@ -72,6 +92,7 @@
 
 ### Association
 - has_many :items
+- has_ancestry
 
 
 
@@ -92,10 +113,9 @@
 ## credit_cardsテーブル
 |Column|Type|Options|
 |------|----|-------|
-|name|string|null: false|
-|number|integer|null: false|
-|expire_date|integer|null: false|
-|cvv|integer|null:false|
+|token|string|null: false|
+|user|references|null: false, foreign_key: true|
+
 
 ### Association
 - belongs_to :user
@@ -105,11 +125,26 @@
 ## commnetsテーブル
 |Column|Type|Options|
 |------|----|-------|
-|text|string|null: false|
+|text|text|null: false|
 |user|references|null: false, foreign_key: true|
 |item|references|null: false, foreign_key: true|
 
 
 ### Association
 - belongs_to :user
+- belongs_to :item
+
+
+
+## deliveriesテーブル
+|Column|Type|Options|
+|------|----|-------|
+|shipping_charge|string|null: false|
+|origin_region||string|null: false|
+|shipping_days|string|null: false|
+|shipping_method|string|null: false|
+|item|references|null: false, foreign_key: true|
+
+
+### Association
 - belongs_to :item
