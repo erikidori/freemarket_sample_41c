@@ -1,24 +1,139 @@
-# README
+## itemsテーブル
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+|Column|Type|Options|
+|------|----|-------|
+|name|string|null: false|
+|price|integer|null: false|
+|buyer|references|foreign_key: true|
+|seller|references|null: false, foreign_key: true|
+|status|string|null: false|
+|brand|references|foreign_key: true|
+|category|references|null: false, foreign_key: true|
+|size|string|
+|condition|string|
+|introduction|text|
+|delivery|references|null: false, foreign_key: true|
 
-Things you may want to cover:
+### Association
+- has_many :images, dependent: :destroy
+- has_many :likes, dependent: :destroy
+- has_many :comments, dependent: :destroy
+- has_one :delivery, dependent: :destroy
+- belongs_to :user, class_name: "User", foreign_key: "seller_id"
+- belongs_to :user, class_name: "User", foreign_key: "buyer_id"
+- belongs_to :brand
+- belongs_to :category
 
-* Ruby version
 
-* System dependencies
 
-* Configuration
+## usersテーブル
 
-* Database creation
+|Column|Type|Options|
+|------|----|-------|
+|nickname|string|null: false|
+|email|string|null: false, add_index :users, email, unique: true|
+|password|string|null: false|
+|phone_number|string|null: false, add_index :users, phone_number, unique: true|
+|last_name|string|null: false|
+|first_name|string|null: false|
+|last_name_kana|string|null: false|
+|first_name_kana|string|null: false|
+|birthday|date|null:false|
+|avatar_image|text|
+|introduction|text|
+|postcode|string|null:false|
+|prefecture||null:false|
+|city|string|null:false|
+|block|string|null:false|
+|building|string|
+|payment|string|null: false|
+|uid|string|
+|provider|string|
+|token|string|null:false|
 
-* Database initialization
 
-* How to run the test suite
+### Association
+- has_many :items, dependent: :destroy
+- has_many :likes, dependent: :destroy
+- has_many :comments, dependent: :destroy
+- has_one :credit_card, dependent: :destroy
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
 
-* ...
+
+## brandsテーブル
+
+|Column|Type|Options|
+|------|----|-------|
+|name|string|null: false|
+
+### Association
+- has_many :items
+
+
+
+## categoriesテーブル
+
+|Column|Type|Options|
+|------|----|-------|
+|name|string|null: false|
+|path|string|null: false|
+
+### Association
+- has_many :items
+- has_ancestry
+
+
+
+
+## likesテーブル
+
+|Column|Type|Options|
+|------|----|-------|
+|item|references|null: false, foreign_key: true|
+|user|references|null: false, foreign_key: true|
+
+### Association
+- belongs_to :user
+- belongs_to : item
+
+
+
+## credit_cardsテーブル
+|Column|Type|Options|
+|------|----|-------|
+|token|string|null: false|
+|user|references|null: false, foreign_key: true|
+
+
+### Association
+- belongs_to :user
+
+
+
+## commnetsテーブル
+|Column|Type|Options|
+|------|----|-------|
+|text|text|null: false|
+|user|references|null: false, foreign_key: true|
+|item|references|null: false, foreign_key: true|
+
+
+### Association
+- belongs_to :user
+- belongs_to :item
+
+
+
+## deliveriesテーブル
+|Column|Type|Options|
+|------|----|-------|
+|shipping_charge|string|null: false|
+|origin_region||string|null: false|
+|shipping_days|string|null: false|
+|shipping_method|string|null: false|
+|item|references|null: false, foreign_key: true|
+
+
+### Association
+- belongs_to :item
