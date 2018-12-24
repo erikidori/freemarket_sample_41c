@@ -33,41 +33,30 @@
 |nickname|string|null: false|
 |email|string|null: false, add_index :users, email, unique: true|
 |password|string|null: false|
-|payment|string|null: false|
-|birthday|date|null:false|
-|avatar_image|text|
-|introduction|text|
-|uid|string|
-|provider|string|
-|token|string|null:false|
-
-### Association
-- has_many :items, dependent: :destroy
-- has_many :likes, dependent: :destroy
-- has_many :comments, dependent: :destroy
-- has_one :personal_informations, dependent: :destroy
-- has_one :credit_card, dependent: :destroy
-
-
-
-## personal_informationsテーブル
-
-|Column|Type|Options|
-|------|----|-------|
+|phone_number|string|null: false, add_index :users, phone_number, unique: true|
 |last_name|string|null: false|
 |first_name|string|null: false|
 |last_name_kana|string|null: false|
 |first_name_kana|string|null: false|
+|birthday|date|null:false|
+|avatar_image|text|
+|introduction|text|
 |postcode|string|null:false|
 |prefecture||null:false|
 |city|string|null:false|
 |block|string|null:false|
 |building|string|
-|phone_number|string|null: false, add_index :users, phone_number, unique: true|
-|user|references|null: false, foreign_key: true|
+|payment|string|null: false|
+|uid|string|
+|provider|string|
+|token|string|null:false|
+
 
 ### Association
-- belongs_to :user
+- has_many :items, dependent: :destroy
+- has_many :likes, dependent: :destroy
+- has_many :comments, dependent: :destroy
+- has_one :credit_card, dependent: :destroy
 
 
 
